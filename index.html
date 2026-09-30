@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>For You — Open at the Right Time</title>
+<style>
+  :root { --bg:#0f0f14; --card:#191922; --text:#f7f3ee; --muted:#bdb6ad; --accent:#e8b4b8; }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#2a2028 0,#0f0f14 55%);
+       color:var(--text);font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:min(680px,100%);background:rgba(25,25,34,.94);border:1px solid #3a3540;border-radius:22px;
+        padding:34px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  h1{font-weight:400;letter-spacing:.5px;margin:0 0 10px;font-size:30px}
+  .sub{color:var(--muted);margin-bottom:28px}
+  .count{font-size:28px;color:var(--accent);margin:22px 0;text-align:center}
+  input{width:100%;padding:14px;border-radius:12px;border:1px solid #4a4550;background:#101017;color:white;font-size:16px}
+  button{width:100%;margin-top:12px;padding:14px;border:0;border-radius:12px;background:var(--accent);color:#20161a;
+         font-weight:700;font-size:16px;cursor:pointer}
+  .error{color:#f2a5a5;min-height:24px;margin-top:10px;text-align:center}
+  .letter{display:none;line-height:1.8;font-size:17px}
+  .letter p{margin:0 0 18px}
+  .signature{margin-top:26px;color:var(--accent)}
+  .locked{display:block}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<main class="card">
+  <section id="locked">
+    <h1>For You — Opened at the Right Time</h1>
+    <div class="sub">There is something waiting for you here.</div>
+    <div id="count" class="count">Loading…</div>
+    <input id="password" type="password" placeholder="Enter the password" autocomplete="off">
+    <button id="openBtn">Open the message</button>
+    <div id="error" class="error"></div>
+  </section>
+
+  <section id="letter" class="letter">
+    <h1>For You ❤️</h1>
+    <p>Dear you,</p>
+    <p>Before you walk into that examination hall, I just want you to remember something simple: <strong>you are more capable than the doubts that sometimes visit your mind.</strong></p>
+    <p>I know how much you’ve put into getting here, and I hope you walk into that room with a calm heart, a clear mind, and the confidence that you deserve to be there.</p>
+    <p>May every question you meet be one you can conquer. May your memory serve you beautifully, may your thoughts come together effortlessly, and may all the hard work you’ve put in finally speak for you.</p>
+    <p>And perhaps this is a little selfish of me to say, but I hope you know that there’s someone quietly rooting for you—someone who genuinely wants to see you smile when it’s all over.</p>
+    <p>So, go in there and give it everything you have.</p>
+    <p><strong>Best of luck with your final exam, beautiful.</strong><br>
+    May this be the beginning of many things you’ll be proud of.</p>
+    <p>And when you’re finally done, remember to breathe, smile, and give yourself the credit you deserve.</p>
+    <p><strong>You’ve got this. ❤️</strong></p>
+    <p class="signature">— Someone quietly rooting for you</p>
+  </section>
+</main>
+
+<script>
+const PASSWORD = "ForYou_0210";
+const RELEASE = new Date("2026-10-02T04:00:00+01:00").getTime();
+
+const count = document.getElementById("count");
+const input = document.getElementById("password");
+const error = document.getElementById("error");
+const locked = document.getElementById("locked");
+const letter = document.getElementById("letter");
+
+function update() {
+  const now = Date.now();
+  const diff = RELEASE - now;
+  if (diff <= 0) {
+    count.textContent = "It’s time. ❤️";
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor(diff % 86400000 / 3600000);
+  const m = Math.floor(diff % 3600000 / 60000);
+  const s = Math.floor(diff % 60000 / 1000);
+  count.textContent = `${d}d ${String(h).padStart(2,"0")}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`;
+}
+setInterval(update,1000); update();
+
+document.getElementById("openBtn").onclick = () => {
+  if (Date.now() < RELEASE) {
+    error.textContent = "Not yet. Come back after 4:00 AM on 2 October.";
+    return;
+  }
+  if (input.value !== PASSWORD) {
+    error.textContent = "That password isn't quite right.";
+    return;
+  }
+  locked.classList.add("hidden");
+  letter.style.display = "block";
+};
+input.addEventListener("keydown", e => { if(e.key==="Enter") document.getElementById("openBtn").click(); });
+</script>
+</body>
+</html>
